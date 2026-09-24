@@ -197,8 +197,9 @@ export function AdminScreen({ catalog }: { catalog: ReviewCatalog }) {
             </button>
           </div>
           <p className="muted">
-            {rows.length} filas · {rows.filter((r) => r.video_id).length} con vídeo elegido. Campos: song_id, title,
-            artist, video_id, youtube_url, status (+ video_title, notes, source_text, duplicate_of, duplicate_ids).
+            {rows.length} filas · {rows.filter((r) => r.video_ids.length > 0).length} con al menos un vídeo elegido ·{' '}
+            {rows.reduce((total, row) => total + row.video_ids.length, 0)} vídeos elegidos en total. Los campos
+            video_id/youtube_url conservan la primera elección; video_ids/youtube_urls contienen todas.
           </p>
         </section>
 
@@ -232,10 +233,17 @@ export function AdminScreen({ catalog }: { catalog: ReviewCatalog }) {
                       <span className={`status-pill status-pill--${row.status}`}>{row.status}</span>
                     </td>
                     <td>
-                      {row.youtube_url ? (
-                        <a href={row.youtube_url} target="_blank" rel="noopener noreferrer">
-                          {row.video_id}
-                        </a>
+                      {row.youtube_urls.length > 0 ? (
+                        <span className="admin-video-links">
+                          {row.youtube_urls.map((url, index) => (
+                            <span key={row.video_ids[index] ?? url}>
+                              {index > 0 && ' · '}
+                              <a href={url} target="_blank" rel="noopener noreferrer">
+                                {row.video_ids[index] ?? `vídeo ${index + 1}`}
+                              </a>
+                            </span>
+                          ))}
+                        </span>
                       ) : (
                         '—'
                       )}
