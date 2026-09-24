@@ -1,4 +1,5 @@
 import type { SelectionMap } from '../data/progress'
+import { encodeVideoSelections } from '../data/selectionCodec'
 import type { SelectionRecord, SelectionStatus } from '../types'
 import { normalizeRecord, type LocalPersistence } from './localPersistence'
 import type { RemoteGateway } from './remote'
@@ -127,6 +128,32 @@ export class SelectionStore {
       selected_video_id: chosen?.videoId ?? null,
       selected_url: chosen?.url ?? null,
       selected_title: chosen?.title ?? null,
+      notes: previous?.notes ?? null,
+      created_at: previous?.created_at ?? timestamp,
+      updated_at: timestamp,
+    })
+  }
+
+  /**
+   * Guarda una o varias versiones para la misma canción. Si se quita la última,
+   * la canción vuelve a pendiente mediante el estado "skipped" (no cuenta como hecha).
+   */
+  setVideoSelections(songId: number, videos: readonly SelectedVideo[]): void {
+    if (videos.length === 0) {
+      this.setStatus(songId, 'skipped')
+      return
+    }
+    const previous = this.records[songId]
+    const timestamp = this.nextTimestamp(previous?.updated_at)
+    const encoded = encodeVideoSelections(videos)
+    if (!encoded) return
+    this.commit({
+      session_id: this.sessionId,
+      song_id: songId,
+      status: 'selected',
+      selected_video_id: encoded.selected_video_id,
+      selected_url: encoded.selected_url,
+      selected_title: encoded.selected_title,
       notes: previous?.notes ?? null,
       created_at: previous?.created_at ?? timestamp,
       updated_at: timestamp,

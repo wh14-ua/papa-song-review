@@ -73,8 +73,8 @@ export function CandidateCard({ candidate, number, selected, playing, onPlay, on
           onClick={onChoose}
           aria-pressed={selected}
         >
-          <span>{selected ? '✅ 已选这个' : '✅ 就这个'}</span>
-          <span className="btn__es">{selected ? 'Elegida' : 'Elegir esta'}</span>
+          <span>{selected ? '↩ 取消选择' : '✅ 选择这个'}</span>
+          <span className="btn__es">{selected ? 'Quitar' : 'Elegir esta'}</span>
         </button>
       </div>
     </article>

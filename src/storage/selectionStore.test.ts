@@ -51,6 +51,34 @@ describe('SelectionStore sin Supabase (localStorage)', () => {
     })
   })
 
+  it('permite elegir varias versiones y quitar una o todas', async () => {
+    const { store } = makeStore()
+    await store.start()
+    const other = { videoId: 'lasUoe2Zzyk', url: 'https://www.youtube.com/watch?v=lasUoe2Zzyk', title: 'otra versión' }
+
+    store.setVideoSelections(3, [VIDEO, other])
+    expect(store.getSnapshot().records[3]).toMatchObject({
+      status: 'selected',
+      selected_video_id: 'Yl9sIjmaZP8',
+      selected_title: '__multi__:Yl9sIjmaZP8,lasUoe2Zzyk',
+    })
+
+    store.setVideoSelections(3, [other])
+    expect(store.getSnapshot().records[3]).toMatchObject({
+      status: 'selected',
+      selected_video_id: 'lasUoe2Zzyk',
+      selected_title: '__multi__:lasUoe2Zzyk',
+    })
+
+    store.setVideoSelections(3, [])
+    expect(store.getSnapshot().records[3]).toMatchObject({
+      status: 'skipped',
+      selected_video_id: null,
+      selected_url: null,
+      selected_title: null,
+    })
+  })
+
   it('cada sesión tiene su propio progreso', async () => {
     const storage = new MemoryStorage()
     const papa = makeStore({ storage }).store

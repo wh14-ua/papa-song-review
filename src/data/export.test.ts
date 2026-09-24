@@ -38,7 +38,7 @@ describe('buildExportRows', () => {
 
   it('exporta una fila por canción canónica con el formato pedido', () => {
     const rows = buildExportRows(catalog, records, { includeDuplicates: false })
-    expect(rows).toHaveLength(121)
+    expect(rows).toHaveLength(119)
     expect(rowFor(rows, 37)).toMatchObject({
       song_id: 37,
       title: '一千个伤心的理由',
@@ -68,6 +68,27 @@ describe('buildExportRows', () => {
     })
   })
 
+  it('exporta todas las versiones cuando papá selecciona varias', () => {
+    const multi = {
+      ...records,
+      3: {
+        ...rec(3, 'selected', { id: 'Ov_BFvQ2haU', title: 'legacy placeholder' }),
+        selected_title: '__multi__:Ov_BFvQ2haU,lasUoe2Zzyk',
+      },
+    }
+    const rows = buildExportRows(catalog, multi, { includeDuplicates: false })
+    expect(rowFor(rows, 3)).toMatchObject({
+      video_id: 'Ov_BFvQ2haU',
+      video_ids: ['Ov_BFvQ2haU', 'lasUoe2Zzyk'],
+      youtube_urls: [
+        'https://www.youtube.com/watch?v=Ov_BFvQ2haU',
+        'https://www.youtube.com/watch?v=lasUoe2Zzyk',
+      ],
+      status: 'selected',
+    })
+    expect(rowFor(rows, 3).video_titles).toHaveLength(2)
+  })
+
   it('las canciones sin vídeo elegido no llevan vídeo y las no revisadas salen como pending', () => {
     const rows = buildExportRows(catalog, records, { includeDuplicates: false })
     expect(rowFor(rows, 3)).toMatchObject({
@@ -87,10 +108,10 @@ describe('buildExportRows', () => {
     expect(rows.some((r) => r.song_id === 11)).toBe(false)
   })
 
-  it('con duplicados: 142 filas y cada duplicado hereda la elección del canónico', () => {
+  it('con duplicados: 140 filas (sin las entradas 1 y 2) y cada duplicado hereda la elección del canónico', () => {
     const rows = buildExportRows(catalog, records, { includeDuplicates: true })
-    expect(rows).toHaveLength(142)
-    expect(rows.map((r) => r.song_id)).toEqual(Array.from({ length: 142 }, (_, i) => i + 1))
+    expect(rows).toHaveLength(140)
+    expect(rows.map((r) => r.song_id)).toEqual(Array.from({ length: 140 }, (_, i) => i + 3))
     expect(rowFor(rows, 74)).toMatchObject({
       song_id: 74,
       title: '一千个伤心的理由',
@@ -114,6 +135,9 @@ describe('toCsv', () => {
       youtube_url: null,
       status: 'none',
       video_title: null,
+      video_ids: [],
+      youtube_urls: [],
+      video_titles: [],
       notes: 'dice "otra", con comas\ny salto',
       source_text: '忘不了的人',
       duplicate_of: null,
@@ -124,8 +148,8 @@ describe('toCsv', () => {
   it('genera UTF-8 con BOM, cabecera y escapa comillas, comas y saltos de línea', () => {
     expect(toCsv(rows)).toBe(
       '﻿' +
-        'song_id,title,artist,video_id,youtube_url,status,video_title,notes,source_text,duplicate_of,duplicate_ids\r\n' +
-        '3,忘不了的人,洋澜一,,,none,,"dice ""otra"", con comas\ny salto",忘不了的人,,11 131\r\n',
+        'song_id,title,artist,video_id,youtube_url,status,video_title,video_ids,youtube_urls,video_titles,notes,source_text,duplicate_of,duplicate_ids\r\n' +
+        '3,忘不了的人,洋澜一,,,none,,,,,"dice ""otra"", con comas\ny salto",忘不了的人,,11 | 131\r\n',
     )
   })
 

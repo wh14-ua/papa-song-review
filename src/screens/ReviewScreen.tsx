@@ -9,6 +9,7 @@ import { SongCover } from '../components/SongCover'
 import { StatusActions } from '../components/StatusActions'
 import { StorageWarning } from '../components/StorageWarning'
 import { adjacentSongIds, computeStats } from '../data/progress'
+import { selectedVideoIds } from '../data/selectionCodec'
 import { OTHER_STATUSES, STATUS_LABELS } from '../labels'
 import { navigate } from '../lib/router'
 import type { InterpretationGroup, ReviewCatalog, ReviewSong, YoutubeCandidate } from '../types'
@@ -27,6 +28,7 @@ export function ReviewScreen({ catalog, song }: ReviewScreenProps) {
   const { prev, next } = adjacentSongIds(catalog.songs, song.id)
   const [playingId, setPlayingId] = useState<string | null>(null)
   const [noteOpen, setNoteOpen] = useState(false)
+  const selectedIds = useMemo(() => selectedVideoIds(record), [record])
 
   const groupMode: GroupMode = song.manualReview ? 'choice' : song.groups.length > 1 ? 'likely' : 'single'
   // "版本 N" continúa entre grupos: primer número de cada grupo.
@@ -47,8 +49,22 @@ export function ReviewScreen({ catalog, song }: ReviewScreenProps) {
   }
 
   const choose = (candidate: YoutubeCandidate, number: number) => {
-    store.setStatus(song.id, 'selected', { videoId: candidate.video_id, url: candidate.url, title: candidate.title })
-    showToast(`✓ 已保存：选了版本 ${number}`)
+    const alreadySelected = selectedIds.includes(candidate.video_id)
+    const nextIds = alreadySelected
+      ? selectedIds.filter((id) => id !== candidate.video_id)
+      : [...selectedIds, candidate.video_id]
+    const videos = nextIds
+      .map((id) => song.candidates.find((item) => item.video_id === id))
+      .filter((item): item is YoutubeCandidate => item !== undefined)
+      .map((item) => ({ videoId: item.video_id, url: item.url, title: item.title }))
+    store.setVideoSelections(song.id, videos)
+    showToast(
+      alreadySelected
+        ? nextIds.length > 0
+          ? `✓ 已取消版本 ${number}，还选了 ${nextIds.length} 个`
+          : '✓ 已取消选择，这首歌稍后再选'
+        : `✓ 已保存：已选 ${nextIds.length} 个版本`,
+    )
   }
 
   const mark = (status: (typeof OTHER_STATUSES)[number]) => {
@@ -89,8 +105,8 @@ export function ReviewScreen({ catalog, song }: ReviewScreenProps) {
           <section className="versions" aria-labelledby="versions-title">
             <h2 id="versions-title" className="section-title">
               {groupMode === 'choice' && song.groups.length > 1
-                ? '先确定是哪一首歌，再选一个版本'
-                : '请听一听，选一个您想要的版本'}
+                ? '先确定是哪一首歌，再选一个或多个版本'
+                : '请听一听，可以选择一个或多个版本'}
             </h2>
             {song.groups.map((group, groupIndex) => (
               <GroupSection
@@ -106,7 +122,7 @@ export function ReviewScreen({ catalog, song }: ReviewScreenProps) {
                       key={candidate.video_id}
                       candidate={candidate}
                       number={number}
-                      selected={record?.status === 'selected' && record.selected_video_id === candidate.video_id}
+                      selected={selectedIds.includes(candidate.video_id)}
                       playing={playingId === candidate.video_id}
                       onPlay={() => setPlayingId(candidate.video_id)}
                       onStop={() => setPlayingId(null)}

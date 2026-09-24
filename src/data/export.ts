@@ -1,9 +1,11 @@
-import type { ReviewCatalog, ReviewSong, SelectionStatus } from '../types'
+import type { ReviewCatalog, ReviewSong, SelectionStatus, YoutubeCandidate } from '../types'
 import type { SelectionMap } from './progress'
+import { selectedVideoIds } from './selectionCodec'
 
 /**
- * Formato de exportación. Los 6 primeros campos son los acordados para el
- * script de descarga; el resto es información adicional.
+ * Formato de exportación. Los campos singulares video_id/youtube_url/video_title
+ * conservan la primera opción por compatibilidad; los arrays contienen TODAS
+ * las versiones elegidas.
  */
 export interface ExportRow {
   song_id: number
@@ -13,6 +15,9 @@ export interface ExportRow {
   youtube_url: string | null
   status: SelectionStatus | 'pending'
   video_title: string | null
+  video_ids: string[]
+  youtube_urls: string[]
+  video_titles: string[]
   notes: string | null
   source_text: string
   /** En filas de duplicados: id canónico del que heredan la elección */
@@ -21,33 +26,43 @@ export interface ExportRow {
   duplicate_ids: number[]
 }
 
+function chosenCandidates(song: ReviewSong, records: SelectionMap): YoutubeCandidate[] {
+  const ids = selectedVideoIds(records[song.id])
+  return ids
+    .map((id) => song.candidates.find((candidate) => candidate.video_id === id))
+    .filter((candidate): candidate is YoutubeCandidate => candidate !== undefined)
+}
+
 function canonicalRow(song: ReviewSong, records: SelectionMap): ExportRow {
   const record = records[song.id]
+  const chosen = chosenCandidates(song, records)
+  const first = chosen[0] ?? null
   const row: ExportRow = {
     song_id: song.id,
     title: song.title,
     artist: song.artist,
-    video_id: null,
-    youtube_url: null,
+    video_id: first?.video_id ?? null,
+    youtube_url: first?.url ?? null,
     status: record?.status ?? 'pending',
-    video_title: null,
+    video_title: first?.title ?? null,
+    video_ids: chosen.map((candidate) => candidate.video_id),
+    youtube_urls: chosen.map((candidate) => candidate.url),
+    video_titles: chosen.map((candidate) => candidate.title),
     notes: record?.notes ?? null,
     source_text: song.sourceText,
     duplicate_of: null,
     duplicate_ids: [...song.duplicateIds],
   }
-  if (record?.status === 'selected' && record.selected_video_id) {
-    row.video_id = record.selected_video_id
-    row.youtube_url = record.selected_url
-    row.video_title = record.selected_title
-    // Título/artista de la interpretación que papá eligió (puede ser una alternativa).
-    const group = song.groups.find((g) => g.candidates.some((c) => c.video_id === record.selected_video_id))
-    const candidate = group?.candidates.find((c) => c.video_id === record.selected_video_id)
+
+  // Título/artista de la interpretación de la primera versión elegida.
+  if (first) {
+    const group = song.groups.find((g) => g.candidates.some((c) => c.video_id === first.video_id))
     if (group) {
       row.title = group.title ?? song.title
-      row.artist = candidate?.artist || group.artist || song.artist
+      row.artist = first.artist || group.artist || song.artist
     }
   }
+
   return row
 }
 
@@ -65,6 +80,9 @@ export function buildExportRows(
       rows.push({
         ...row,
         song_id: duplicateId,
+        video_ids: [...row.video_ids],
+        youtube_urls: [...row.youtube_urls],
+        video_titles: [...row.video_titles],
         source_text: catalog.rawById.get(duplicateId)?.source_text ?? '',
         duplicate_of: song.id,
         duplicate_ids: [],
@@ -86,6 +104,9 @@ const CSV_COLUMNS: (keyof ExportRow)[] = [
   'youtube_url',
   'status',
   'video_title',
+  'video_ids',
+  'youtube_urls',
+  'video_titles',
   'notes',
   'source_text',
   'duplicate_of',
@@ -94,7 +115,7 @@ const CSV_COLUMNS: (keyof ExportRow)[] = [
 
 function csvCell(value: ExportRow[keyof ExportRow]): string {
   if (value === null) return ''
-  const text = Array.isArray(value) ? value.join(' ') : String(value)
+  const text = Array.isArray(value) ? value.join(' | ') : String(value)
   return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text
 }
 
