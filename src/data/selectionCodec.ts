@@ -44,6 +44,7 @@ export function encodeVideoSelections(videos: readonly StoredVideoSelection[]): 
   const unique = [...new Map(videos.map((video) => [video.videoId, video])).values()]
   if (unique.length === 0) return null
   const first = unique[0]
+  if (!first) return null
   return {
     selected_video_id: first.videoId,
     selected_url: first.url,
