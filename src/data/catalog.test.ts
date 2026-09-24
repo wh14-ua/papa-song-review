@@ -153,18 +153,12 @@ describe('agrupación por interpretación', () => {
     ])
   })
 
-  it('una canción sin candidatos no tiene grupos visibles (canción 1)', () => {
-    const song = realCatalog().byId.get(1)
-    expect(song?.groups).toEqual([])
-    expect(song?.candidates).toEqual([])
-    expect(song?.searchUrl).toContain('youtube.com/results')
-  })
-
-  it('manual_review sin identificar y sin opciones: tampoco inventa un grupo vacío (canción 2)', () => {
-    const song = realCatalog().byId.get(2)
-    expect(song?.manualReview).toBe(true)
-    expect(song?.groups).toEqual([])
-    expect(song?.question).toContain('从相拥守着碎碎将来')
+  it('conserva las entradas 1 y 2 en rawById pero no las ofrece para revisión', () => {
+    const catalog = realCatalog()
+    expect(catalog.byId.has(1)).toBe(false)
+    expect(catalog.byId.has(2)).toBe(false)
+    expect(catalog.rawById.get(1)?.source_text).toBe('现在可以你录得好好听得见吗')
+    expect(catalog.rawById.get(2)?.source_text).toBe('从相拥守着碎碎将来')
   })
 })
 
