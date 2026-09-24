@@ -232,6 +232,18 @@ function buildGroups(raw: RawSong): InterpretationGroup[] {
 /* Catálogo de revisión                                                */
 /* ------------------------------------------------------------------ */
 
+// Estas dos entradas no son canciones reales para revisar:
+// 1 = prueba de micrófono del dictado; 2 = fragmento no identificado sin canción/candidatos.
+// Se mantienen en songs.json como trazabilidad de la investigación, pero la UI las omite.
+const EXCLUDED_REVIEW_ENTRIES = new Map<number, string>([
+  [1, '现在可以你录得好好听得见吗'],
+  [2, '从相拥守着碎碎将来'],
+])
+
+function isExcludedReviewEntry(song: RawSong): boolean {
+  return EXCLUDED_REVIEW_ENTRIES.get(song.id) === song.source_text
+}
+
 /** Sigue duplicate_of hasta el registro canónico; null si la cadena está rota. */
 function canonicalRoot(song: RawSong, rawById: ReadonlyMap<number, RawSong>): RawSong | null {
   const seen = new Set<number>()
@@ -252,7 +264,12 @@ export function buildCatalog(dataset: SongsDataset): ReviewCatalog {
 
   const duplicatesOf = new Map<number, number[]>()
   const canonical: RawSong[] = []
+  let excludedCount = 0
   for (const song of sorted) {
+    if (isExcludedReviewEntry(song)) {
+      excludedCount++
+      continue
+    }
     if (song.duplicate_of === null) {
       canonical.push(song)
       continue
@@ -293,7 +310,7 @@ export function buildCatalog(dataset: SongsDataset): ReviewCatalog {
     songs,
     byId: new Map(songs.map((s) => [s.id, s])),
     rawById,
-    expectedUniqueSongs: dataset.counts.unique_songs,
-    totalEntries: dataset.songs.length,
+    expectedUniqueSongs: dataset.counts.unique_songs - excludedCount,
+    totalEntries: dataset.songs.length - excludedCount,
   }
 }
