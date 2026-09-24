@@ -1,0 +1,64 @@
+/*
+ * 爸爸的歌单 — tokens
+ * 朱红 (portada del cancionero) · 墨蓝 (tinta) · 金 (elegido) · papel · niebla
+ */
+:root {
+  color-scheme: light dark;
+
+  --red: #b3261e;
+  --red-soft: rgba(255, 255, 255, 0.86);
+  --accent-text: #b3261e;
+  --ink: #1b2a41;
+  --ink-soft: #46546b;
+  --muted: #5b6778;
+  --gold: #e8b64c;
+  --gold-wash: #fff4d6;
+  --gold-line: #d9a21b;
+  --paper: #ffffff;
+  --mist: #eef0f3;
+  --line: #d5dae1;
+  --warn-bg: #fff1d0;
+  --warn-ink: #6b4200;
+  --danger-bg: #fde2e1;
+  --danger-ink: #7a0c0f;
+  --btn-primary-bg: #1b2a41;
+  --btn-primary-fg: #ffffff;
+  --focus: #1f6feb;
+  --shadow-bar: 0 -6px 18px rgba(27, 42, 65, 0.08);
+  --shadow-note: 0 8px 20px rgba(27, 42, 65, 0.12);
+
+  --font-sans: system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Noto Sans CJK SC',
+    'Source Han Sans SC', 'Microsoft YaHei', sans-serif;
+  --font-serif: 'Songti SC', 'STSong', 'Noto Serif SC', 'Noto Serif CJK SC', 'Source Han Serif SC', 'SimSun', serif;
+  --font-kai: 'Kaiti SC', 'STKaiti', 'KaiTi', 'BiauKai', 'Noto Serif SC', 'Noto Serif CJK SC', serif;
+
+  --radius-card: 16px;
+  --radius-btn: 12px;
+  --page-max: 560px;
+  --gutter: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --red: #8e1f18;
+    --red-soft: rgba(255, 255, 255, 0.84);
+    --accent-text: #ff9a8f;
+    --ink: #eef1f5;
+    --ink-soft: #c5ccd6;
+    --muted: #a9b2bf;
+    --gold-wash: #3a3016;
+    --gold-line: #e8b64c;
+    --paper: #1b2029;
+    --mist: #12161c;
+    --line: #353e4b;
+    --warn-bg: #3b2e10;
+    --warn-ink: #ffd98a;
+    --danger-bg: #4a1716;
+    --danger-ink: #ffc2bd;
+    --btn-primary-bg: #e8b64c;
+    --btn-primary-fg: #1b2a41;
+    --focus: #79b8ff;
+    --shadow-bar: 0 -6px 18px rgba(0, 0, 0, 0.4);
+    --shadow-note: 0 8px 20px rgba(0, 0, 0, 0.45);
+  }
+}

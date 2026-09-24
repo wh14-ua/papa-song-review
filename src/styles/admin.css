@@ -1,0 +1,110 @@
+/* Panel de administración (para el hijo, en español) */
+
+.admin-dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 16px;
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+}
+
+.admin-dl dt {
+  color: var(--muted);
+}
+
+.admin-dl dd {
+  margin: 0;
+  min-width: 0;
+}
+
+.admin-note {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--mist);
+  font-size: 0.95rem;
+}
+
+.admin-note--warn {
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+}
+
+.admin-note--danger {
+  background: var(--danger-bg);
+  color: var(--danger-ink);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.admin-table--summary {
+  max-width: 380px;
+}
+
+.admin-table--summary td {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll .admin-table {
+  min-width: 760px;
+}
+
+.is-duplicate td {
+  color: var(--muted);
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--mist);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-pill--selected {
+  background: var(--gold);
+  color: #1b2a41;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 8px 0 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.checkbox input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 2px 0 0;
+  accent-color: var(--ink);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

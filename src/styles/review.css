@@ -1,0 +1,620 @@
+/* ---------- Portada roja de la canción ---------- */
+
+.cover {
+  padding: 8px var(--gutter) 46px;
+  background: var(--red);
+  color: #ffffff;
+}
+
+.cover__inner {
+  max-width: var(--page-max);
+  margin: 0 auto;
+}
+
+.cover__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+}
+
+.cover__home {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding-right: 12px;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cover__count {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.cover__badge {
+  display: inline-block;
+  margin: 20px 0 0;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #1b2a41;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cover__title {
+  margin: 14px 0 8px;
+  font-family: var(--font-serif);
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  overflow-wrap: anywhere;
+}
+
+.cover__artist {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.cover__chip {
+  padding: 1px 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cover__label {
+  margin: 16px 0 2px;
+  color: var(--red-soft);
+  font-size: 0.95rem;
+}
+
+/* Lo que escribió papá, como a mano */
+.cover__handwriting {
+  margin: 0;
+  font-family: var(--font-kai);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.cover__question {
+  margin: 10px 0 0;
+  color: var(--red-soft);
+  font-size: 1.1rem;
+}
+
+/* Progreso */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress__track {
+  flex: 1;
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: var(--line);
+  color: var(--accent-text);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.progress__track::-webkit-progress-bar {
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.progress__track::-webkit-progress-value {
+  border-radius: 999px;
+  background: var(--accent-text);
+  transition: width 0.3s ease;
+}
+
+.progress__track::-moz-progress-bar {
+  border-radius: 999px;
+  background: var(--accent-text);
+}
+
+.progress__text {
+  flex: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress--on-red .progress__track,
+.progress--on-red .progress__track::-webkit-progress-bar {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.progress--on-red .progress__track::-webkit-progress-value {
+  background: var(--gold);
+}
+
+.progress--on-red .progress__track::-moz-progress-bar {
+  background: var(--gold);
+}
+
+/* Nota "您原来写的" pegada al borde de la portada */
+.note-card {
+  position: relative;
+  max-width: calc(var(--page-max) + 2 * var(--gutter));
+  margin: -30px auto 0;
+  padding: 0 var(--gutter);
+}
+
+.note-card__paper {
+  padding: 10px 16px 12px;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--red);
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: var(--shadow-note);
+}
+
+.note-card__label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.note-card__text {
+  margin: 2px 0 0;
+  font-family: var(--font-kai);
+  font-size: 1.4rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.page--review {
+  padding-top: 8px;
+}
+
+/* ---------- Grupos por interpretación ---------- */
+
+.group {
+  margin-top: 20px;
+}
+
+.group + .group {
+  margin-top: 36px;
+}
+
+.group__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.group__letter {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.group__heading {
+  min-width: 0;
+}
+
+.group__kicker {
+  margin: 0;
+  color: var(--accent-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.group__title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.group__artist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+}
+
+.group__year {
+  color: var(--muted);
+}
+
+.group__cards {
+  display: grid;
+  gap: 16px;
+}
+
+.group__empty {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius-card);
+  color: var(--ink-soft);
+}
+
+.group__empty p {
+  margin: 0;
+}
+
+/* ---------- Tarjeta de cada versión ---------- */
+
+.card {
+  overflow: hidden;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+}
+
+.card--selected {
+  border-color: var(--gold-line);
+  background: var(--gold-wash);
+  box-shadow: 0 0 0 2px var(--gold-line);
+}
+
+.card__media {
+  background: #000000;
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 0;
+  background: #20242c;
+  cursor: pointer;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb__play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: auto;
+  border-radius: 50%;
+  background: rgba(179, 38, 30, 0.92);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.player__frame {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  background: #000000;
+}
+
+.player__frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.player__problem {
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.card__body {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px 16px;
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.card__number {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.tag {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--mist);
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.tag--chosen {
+  background: var(--gold);
+  color: #1b2a41;
+}
+
+.card__title {
+  display: -webkit-box;
+  margin: 2px 0 0;
+  overflow: hidden;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.card__meta {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.card__meta--soft {
+  color: var(--muted);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.card__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 4px;
+}
+
+.card__row .btn {
+  flex: 1 1 auto;
+  white-space: nowrap;
+}
+
+/* ---------- Otras respuestas ---------- */
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.status-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  min-height: 78px;
+  padding: 10px 14px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-btn);
+  background: var(--paper);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.status-btn__zh {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.status-btn__es {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+
+.status-btn--active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.status-btn--active .status-btn__es {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.search-link {
+  margin: 14px 0 0;
+}
+
+.search-link a {
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+/* ---------- Nota ---------- */
+
+.note {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.note__saved {
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--gold-line);
+  border-radius: 8px;
+  background: var(--paper);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.note__saved-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.note__prompt {
+  font-weight: 600;
+}
+
+.note__input {
+  width: 100%;
+  min-height: 110px;
+  padding: 12px;
+  border: 2px solid var(--ink-soft);
+  border-radius: var(--radius-btn);
+  background: var(--paper);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.note__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.note__status {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Estados vacíos / avisos ---------- */
+
+.empty-state {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+  padding: 20px;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+}
+
+.empty-state__text {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.all-done {
+  margin: 24px 0 0;
+  padding: 14px 16px;
+  border: 2px solid var(--gold-line);
+  border-radius: var(--radius-card);
+  background: var(--gold-wash);
+  font-weight: 700;
+}
+
+.storage-warning {
+  margin: 12px 0 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  font-weight: 600;
+}
+
+/* ---------- Barra inferior ---------- */
+
+.bottom-nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  box-shadow: var(--shadow-bar);
+}
+
+.bottom-nav__inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: var(--page-max);
+  margin: 0 auto;
+}
+
+.sync-badge {
+  flex: none;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ---------- Mensaje breve ---------- */
+
+.toast {
+  position: fixed;
+  right: 0;
+  bottom: calc(100px + env(safe-area-inset-bottom));
+  left: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--gutter);
+  pointer-events: none;
+}
+
+.toast__bubble {
+  max-width: 520px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  animation: toast-in 0.2s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,50 @@
+# Despliegue OPCIONAL en GitHub Pages. Solo se ejecuta a mano:
+# pestaña Actions → "Deploy to GitHub Pages" → Run workflow.
+# Antes: Settings → Pages → Source: "GitHub Actions" y, si usas Supabase,
+# Settings → Secrets and variables → Actions → Variables:
+#   VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - name: Build (con la base /<nombre-del-repo>/ y 404.html para rutas como /admin)
+        run: npm run build:gh-pages
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

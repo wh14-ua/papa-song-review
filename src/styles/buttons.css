@@ -1,0 +1,91 @@
+.btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 8px 16px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-btn);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Subtítulo pequeño en español dentro del botón */
+.btn__es {
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn--primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+}
+
+.btn--secondary {
+  border-color: var(--ink-soft);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.btn--quiet {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn--chosen {
+  background: var(--gold);
+  color: #1b2a41;
+}
+
+/* Sobre la portada roja */
+.btn--on-red {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  min-height: 64px;
+  background: #ffffff;
+  color: var(--red);
+  font-size: 1.3rem;
+}
+
+.btn--on-red-outline {
+  min-height: 56px;
+  border-color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.btn__count {
+  font-variant-numeric: tabular-nums;
+}
+
+.btn--nav {
+  flex: 1;
+  min-height: 60px;
+}
