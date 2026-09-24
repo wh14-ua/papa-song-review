@@ -11,8 +11,7 @@ export interface StoredVideoSelection {
 
 /**
  * Lee las versiones elegidas de una fila. Compatible con las filas antiguas
- * (una sola selección) y con el formato multi-select, que guarda la lista de
- * video_ids dentro de selected_title para no exigir una migración de Supabase.
+ * (una sola selección) y con el nuevo formato multi-select.
  */
 export function selectedVideoIds(record: SelectionRecord | undefined): string[] {
   if (!record || record.status !== 'selected' || !record.selected_video_id) return []
@@ -30,9 +29,12 @@ export function selectedVideoIds(record: SelectionRecord | undefined): string[] 
 }
 
 /**
- * Codifica una o varias selecciones usando las columnas existentes.
- * Para una sola conserva selected_title como antes. Para varias, selected_title
- * contiene únicamente los ids; título/URL se reconstruyen desde songs.json.
+ * Codifica una o varias selecciones usando las columnas existentes, así no
+ * hace falta migrar Supabase mientras papá ya está usando producción.
+ *
+ * selected_video_id / selected_url conservan la primera opción para
+ * compatibilidad. selected_title guarda la lista compacta de video_ids y la
+ * UI/exportación reconstruye títulos y URLs desde songs.json.
  */
 export function encodeVideoSelections(videos: readonly StoredVideoSelection[]): {
   selected_video_id: string
@@ -41,16 +43,7 @@ export function encodeVideoSelections(videos: readonly StoredVideoSelection[]): 
 } | null {
   const unique = [...new Map(videos.map((video) => [video.videoId, video])).values()]
   if (unique.length === 0) return null
-
   const first = unique[0]
-  if (unique.length === 1) {
-    return {
-      selected_video_id: first.videoId,
-      selected_url: first.url,
-      selected_title: first.title,
-    }
-  }
-
   return {
     selected_video_id: first.videoId,
     selected_url: first.url,
