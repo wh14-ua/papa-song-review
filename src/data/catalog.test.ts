@@ -49,11 +49,13 @@ function fixture(songs: RawSong[]) {
 }
 
 describe('songs.json real', () => {
-  it('se carga y deja exactamente las 121 canciones canónicas', () => {
+  it('se carga y deja 119 canciones revisables (excluye las entradas 1 y 2)', () => {
     const catalog = realCatalog()
-    expect(catalog.songs).toHaveLength(121)
-    expect(catalog.expectedUniqueSongs).toBe(121)
-    expect(catalog.totalEntries).toBe(142)
+    expect(catalog.songs).toHaveLength(119)
+    expect(catalog.expectedUniqueSongs).toBe(119)
+    expect(catalog.totalEntries).toBe(140)
+    expect(catalog.byId.has(1)).toBe(false)
+    expect(catalog.byId.has(2)).toBe(false)
   })
 
   it('no incluye ningún registro con duplicate_of', () => {
@@ -74,11 +76,11 @@ describe('songs.json real', () => {
 
   it('numera las posiciones en orden de id', () => {
     const catalog = realCatalog()
-    expect(catalog.songs[0]?.id).toBe(1)
+    expect(catalog.songs[0]?.id).toBe(3)
     expect(catalog.songs[0]?.position).toBe(1)
-    expect(catalog.byId.get(37)?.position).toBe(33)
-    expect(catalog.songs[120]?.id).toBe(142)
-    expect(catalog.songs[120]?.position).toBe(121)
+    expect(catalog.byId.get(37)?.position).toBe(31)
+    expect(catalog.songs[118]?.id).toBe(142)
+    expect(catalog.songs[118]?.position).toBe(119)
   })
 
   it('mantiene título, artista, año y texto original de la canción 37', () => {
